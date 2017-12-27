@@ -86,6 +86,7 @@ describe('GET /todos/:id', () => {
             })
             .end(done);
     });
+   
     it('should return 404 if todo not found', (done) => {
         var testId = new ObjectId();
         request(app)
@@ -93,6 +94,7 @@ describe('GET /todos/:id', () => {
         .expect(404)
         .end(done);
     });
+   
     it('should return 404 for non-objectId', (done) =>{
         request(app)
         .get('/todos/123')
