@@ -1,3 +1,5 @@
+require('./config/config');
+
 const _ = require('lodash')
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -8,7 +10,7 @@ var {Users} = require('./models/user');
 const {ObjectId} = require('mongodb');
 var {authenticate} = require('./middleware/authenticate');
 var app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
@@ -96,8 +98,6 @@ app.post('/users', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
     var user = new Users(body);
     
-
-
     user.save().then(() => {
         return user.generateAuthToken();
     }).then((token) => {
