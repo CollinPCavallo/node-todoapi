@@ -1,18 +1,28 @@
-const {ObjectId} = require('mongodb');
+const {
+    ObjectId
+} = require('mongodb');
 
 const jwt = require('jsonwebtoken');
-const {Todo} = require('./../../models/todo')
-const {Users} = require('./../../models/user')
+const {
+    Todo
+} = require('./../../models/todo')
+const {
+    Users
+} = require('./../../models/user')
 const user1ID = new ObjectId();
 const user2ID = new ObjectId();
 
 const todos = [{
     _id: new ObjectId(),
-    text: 'First test todo'
+    text: 'First test todo',
+    _creator: user1ID
 
 }, {
     _id: new ObjectId(),
-    text: 'second test todo'
+    text: 'second test todo',
+    completed: true,
+    completedAt: 333,
+    _creator: user2ID
 }]
 
 const populateTodos = (done) => {
@@ -27,17 +37,28 @@ const users = [{
     password: 'Password1',
     tokens: [{
         access: 'auth',
-        token: jwt.sign({ _id: user1ID, access: 'auth' }, '123abc').toString()
+        token: jwt.sign({
+            _id: user1ID,
+            access: 'auth'
+        }, '123abc').toString()
     }]
-},{
+}, {
     _id: user2ID,
     email: 'brad@example.com',
-    password: 'password2'
+    password: 'password2',
+    tokens: [{
+        access: 'auth',
+        token: jwt.sign({
+            _id: user1ID,
+            access: 'auth'
+        }, '123abc').toString()
+    }]
+
 
 }]
 
 const populateUsers = (done) => {
-    Users.remove({}).then(() =>{
+    Users.remove({}).then(() => {
         var userOne = new Users(users[0]).save();
         var userTwo = new Users(users[1]).save();
 
@@ -45,4 +66,9 @@ const populateUsers = (done) => {
     }).then(() => done());
 }
 
-module.exports = {todos, populateTodos ,populateUsers, users};
+module.exports = {
+    todos,
+    populateTodos,
+    populateUsers,
+    users
+};
